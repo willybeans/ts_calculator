@@ -1,12 +1,11 @@
 var buttons = ['0','1','2','3','4','5','6',
-               '7','8','9','=','+','-','CE','AC','.'];
+               '7','8','9','=','+','-','*','/','CE','AC','.'];
 var currentEntry = [], totalEntry = [];
 var testNum = /[0-9]/g;
+var testOperands = /[+\-\/*=]/;
 
 window.onload = () => {
- // inputField();
   makeButtons();
-  //applyClick();
 }
 
 function applyClick(x) {
@@ -25,55 +24,31 @@ function applyClick(x) {
         currentEntry = [];
       }
      currentEntry.push(x);
+     totalEntry.push(x);
      currentArea.textContent = (currentArea.textContent + x);
      totalArea.textContent = (totalArea.textContent + x);
-  } else {
-    switch (x) {
-      case "CE": //clear Entry only
-        currentEntry = [];
-        textArea.textContent = "0";
-        break;
-      case "AC": //Clear All *
-        currentEntry = [];
-        totalEntry = [];
-        totalArea.textContent = "0";
-        currentArea.textContent = "0"
-        break;
-      case "+":
+  } else if (isNaN(x)) { //for all non numerics
+        if(testOperands.test(currentEntry[0])){ //for operands
+          currentArea.textcontent = x;
+          totalArea.textContent = totalArea.textContent + "";
+        } else if (x === ".") {
+          //this needs to behave similar to a number but cant use more than one
+        } else if (x === "AC" || x === "CE") {
+          currentEntry = [];
+          currentArea.textContent = "0"
+          if (x === "AC"){
+          totalEntry = [];
+          totalArea.textContent = "0";
+          }
+        } else {
         currentArea.textContent = x;
         totalArea.textContent = (totalArea.textContent + x);
-        currentEntry = ["+"];
+        currentEntry = [x];
         totalEntry.push(x);
-        break;
-      case "-":
-        textArea.textContent = (totalArea.textContent + x);
-        break;
-      case ".":
-        textArea.textContent = (totalArea.textContent + x);
-        break;
-      case "=":
-        totalEntry.push(totalArea.textContent);
-        // console.log(totalArea.textContent)
-        // console.log(currentArea.textContent);
-        //console.log(text);
-        break;
-    }
+        }
    }
-    //console.log(totalEntry);
-    console.log(currentEntry);
   }
  }
-
-// function inputField() {
-//   var field = document.createElement("div");
-//   var text = document.createTextNode("0");
-//   field.id = "textArea";
-//   field.style.background = "black";
-//   field.style.color = "white";
-//   field.appendChild(text);
-//   document.body.appendChild(field);
-// }
-//consider using this for the subarray
 
 function makeButtons() {
   for (var i = 0; i < buttons.length; i++){
@@ -87,7 +62,3 @@ function makeButtons() {
 
   }
 }
-
-/* should we have a var set to a string that can populate our form
-
-*/
