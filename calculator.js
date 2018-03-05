@@ -40,7 +40,13 @@ function applyClick(x) {
             currentEntry[0] = x;
             currentArea.textContent = x;
           } else if (x === "=") {
+            var meow = currentEntry.join('');
+            totalEntry.push(meow);
+            if (totalEntry.includes("*")){
+              console.log(totalEntry.indexOf("*"));
 
+            }
+            console.log("meowwwwwtside");
           }
           else {
             var hello = currentEntry.join('') // dude change this var name lmao
