@@ -42,11 +42,17 @@ function applyClick(x) {
           } else if (x === "=") {
             var meow = currentEntry.join('');
             totalEntry.push(meow);
-            if (totalEntry.includes("*")){
-              console.log(totalEntry.indexOf("*"));
+            if(totalEntry.includes("*")){
+              console.log("inside)");
+              let index = totalEntry.indexOf("*");
+              let a = totalEntry[index - 1];
+              let b = totalEntry[index + 1];
+              let c =  a * b;
+              //so how to inject into proper place in array?
+              console.log("total:" + c);
 
             }
-            console.log("meowwwwwtside");
+            //console.log("meowwwwwtside");
           }
           else {
             var hello = currentEntry.join('') // dude change this var name lmao
