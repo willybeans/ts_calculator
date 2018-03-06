@@ -20,7 +20,7 @@ function applyClick(x) {
         totalArea.textContent = " ";
       }
        if(testOperands.test(currentEntry[0])){ //after using operands
-         console.log("im working");
+        // console.log("im working");
         currentArea.textContent = x;
         totalArea.textContent = totalArea.textContent + currentEntry[0];
         totalEntry.push(currentEntry[0]);
@@ -31,7 +31,7 @@ function applyClick(x) {
      //totalEntry.push(x);
      currentArea.textContent = (currentArea.textContent + x);
     // totalArea.textContent = (totalArea.textContent + x);
-     console.log(totalEntry + "outside");
+    // console.log(totalEntry + "outside");
    }
   } else if (isNaN(x)) { //for all non numerics
         if(testOperands.test(x)){ //for operands
@@ -40,19 +40,38 @@ function applyClick(x) {
             currentEntry[0] = x;
             currentArea.textContent = x;
           } else if (x === "=") {
-            var meow = currentEntry.join('');
-            totalEntry.push(meow);
-            if(totalEntry.includes("*")){
-              console.log("inside)");
-              let index = totalEntry.indexOf("*");
-              let a = totalEntry[index - 1];
-              let b = totalEntry[index + 1];
-              let c =  a * b;
-              //so how to inject into proper place in array?
-              console.log("total:" + c);
+            var final = currentEntry.join('');
+            totalEntry.push(final);
+              while(totalEntry.includes("*") || totalEntry.includes("/")){
+                if(totalEntry.includes("*")){
+                  console.log("inside)");
+                  let index = totalEntry.indexOf("*");
+                  let a = totalEntry[index - 1];
+                  let b = totalEntry[index + 1];
+                  let c =  a * b;
+                  //so how to inject into proper place in array?
+                  console.log(index - 1);
+                  console.log(totalEntry);
+                  totalEntry.splice((index - 1),3,c);
+                  //console.log(testArray);
+                  console.log(totalEntry);
+                } else {
+                  let index = totalEntry.indexOf("/");
+                  let a = totalEntry[index - 1];
+                  let b = totalEntry[index + 1];
+                  let c =  a / b;
+                  //injecting new total here
+                  console.log(index - 1);
+                  console.log(totalEntry);
+                  totalEntry.splice((index - 1),3,c);
+                  //console.log(testArray);
+                  console.log(totalEntry);
 
-            }
-            //console.log("meowwwwwtside");
+                }
+
+              }
+
+            console.log("meowwwwwtside");
           }
           else {
             var hello = currentEntry.join('') // dude change this var name lmao
@@ -84,8 +103,8 @@ function applyClick(x) {
       //  totalEntry.push(x + "nonnum");
         }
    }
-   console.log("current: " + currentEntry);
-   console.log("total: " + totalEntry);
+   //console.log("current: " + currentEntry);
+   //console.log("total: " + totalEntry);
    // meow = totalEntry.join(''); didnt expect this to work
    // totalArea.textContent = meow;
    // var meow = totalArea.textContent;
