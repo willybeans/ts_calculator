@@ -42,6 +42,7 @@ function applyClick(x) {
           } else if (x === "=") {
             var final = currentEntry.join('');
             totalEntry.push(final);
+            totalArea.textContent = totalArea.textContent + currentArea.textContent;
               while(totalEntry.includes("*") || totalEntry.includes("/")){
                 if(totalEntry.includes("*")){
                   console.log("inside)");
@@ -61,17 +62,29 @@ function applyClick(x) {
                   let b = totalEntry[index + 1];
                   let c =  a / b;
                   //injecting new total here
-                  console.log(index - 1);
-                  console.log(totalEntry);
                   totalEntry.splice((index - 1),3,c);
-                  //console.log(testArray);
-                  console.log(totalEntry);
-
                 }
-
               }
+              while(totalEntry.includes("+") || totalEntry.includes("-")){
+                if(totalEntry.includes("+")){
+                  let index = totalEntry.indexOf("+");
+                  let a = Number(totalEntry[index - 1]); //+ is concatenating instead of adding
+                  let b = Number(totalEntry[index + 1]);
+                  let c =  a + b;
 
+                  totalEntry.splice((index - 1),3,c);
+                } else {
+                  let index = totalEntry.indexOf("-");
+                  let a = totalEntry[index - 1];
+                  let b = totalEntry[index + 1];
+                  let c =  a - b;
+                  //injecting new total here
+                  totalEntry.splice((index - 1),3,c);
+                }
+              }
+            currentArea.textContent = totalEntry[0];
             console.log("meowwwwwtside");
+            console.log(totalEntry);
           }
           else {
             var hello = currentEntry.join('') // dude change this var name lmao
