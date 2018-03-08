@@ -1,5 +1,5 @@
-var buttons = ['0','1','2','3','4','5','6',
-               '7','8','9','=','+','-','*','/','CE','AC','.'];
+var buttons = ['CE','AC','9','8','7','6','5','4','3',
+               '2','1','0','=','+','-','*','/','.'];
 var currentEntry = [], totalEntry = [];
 var testNum = /[0-9]/g;
 var testOperands = /[+\-\/*=]/;
@@ -12,10 +12,14 @@ function applyClick(x) {
   var btn = document.getElementById("b" + x);
   var totalArea = document.getElementById("totalArea");
   var currentArea = document.getElementById("currentArea");
+  var equals = false;
 
   btn.onclick = () => {
     if(!isNaN(x)) { //test for number
-      if(currentEntry[0] === undefined){ //clear for first entry
+      if(currentEntry[0] === undefined || equals){ //clear for first entry
+        equals = false;
+        currentEntry = [];
+        totalEntry = [];
         currentArea.textContent = " ";
         totalArea.textContent = " ";
       }
@@ -82,6 +86,8 @@ function applyClick(x) {
                   totalEntry.splice((index - 1),3,c);
                 }
               }
+            currentEntry = [];
+            equals = true;
             currentArea.textContent = totalEntry[0];
             console.log("meowwwwwtside");
             console.log(totalEntry);
@@ -129,10 +135,12 @@ function makeButtons() {
   for (var i = 0; i < buttons.length; i++){
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode(buttons[i]);
+    var container = document.getElementById('container');
     btn.id = "b" + buttons[i];
     //btn.onlick = applyClick;
     btn.appendChild(t);
-    document.body.appendChild(btn);
+    container.appendChild(btn);
+  //  document.body.appendChild(btn);
     applyClick(buttons[i]);
 
   }
