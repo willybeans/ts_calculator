@@ -12,3 +12,12 @@
   grid-column: 1 / span 4;
   grid-row: 2;
 }
+#bAC {
+  grid-column: 3 / span 2;
+}
+#bCE {
+  grid-column: 1 / span 2;
+}
+#b0 {
+  grid-column: 1 / span 2;
+}
