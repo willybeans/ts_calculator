@@ -1,23 +1,68 @@
 #container {
- display: grid;
- grid-template-columns: auto auto auto auto;
- grid-template-rows: auto auto auto auto auto;
- padding: 10px;
+  max-width: 150px;
+  margin: auto;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: auto auto auto auto auto auto auto;
+  padding: 10px;
+  border: 1px solid black;
 }
-#currentArea {
+#numberArea {
   grid-column: 1 / span 4;
   grid-row: 1;
+  padding-right: 5px;
+  border-radius: 5px;
+  background-color: #c4f8dd;
+  text-align: right;
+  margin-bottom: 5px;
+}
+#currentArea{
+  font-size: 2em;
 }
 #totalArea{
-  grid-column: 1 / span 4;
-  grid-row: 2;
+  position: relative;
+  width: auto;
+  right: 0px;
+  height: 25px;
+  font-size: 1em;
 }
+
 #bAC {
-  grid-column: 3 / span 2;
+  grid-column: 3 / span 1;
 }
 #bCE {
-  grid-column: 1 / span 2;
+  grid-column: 2 / span 1;
 }
-#b0 {
-  grid-column: 1 / span 2;
+#b\+ {
+  grid-column: 4;
+  grid-row-start: 5;
+  grid-row-end: 7;
+}
+
+#bAC, #bCE { background-color: red;}
+.button{
+  border-radius: 5px;
+}
+
+#b\-, #b\+, #b\/, #b\* {
+  background-color: #f2f645;
+}
+#b\= {
+  background-color: #8fecd4;
+}
+.cube {
+  width: inherit;
+  height: inherit;
+}
+.cubeface {
+  width: inherit;
+  height: inherit;
+
+  background-color: #89cfaa;
+  opacity: 0.8;
+}
+
+.cubeface-right{
+  transform: rotateY(90deg)
 }

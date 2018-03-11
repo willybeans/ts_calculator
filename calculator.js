@@ -1,5 +1,5 @@
-var buttons = ['CE','AC','7','8','9','*','4','5','6',
-               '/','1','2','3','-','0','.','+'];
+var buttons = ['CE','AC', '*','7','8','9','/','4','5','6',
+               '-','1','2','3','+','0','.','='];
 var currentEntry = [], totalEntry = [];
 var testNum = /[0-9]/g;
 var testOperands = /[+\-\/*=]/;
@@ -137,6 +137,7 @@ function makeButtons() {
     var t = document.createTextNode(buttons[i]);
     var container = document.getElementById('container');
     btn.id = "b" + buttons[i];
+    btn.className = "button";
     //btn.onlick = applyClick;
     btn.appendChild(t);
     container.appendChild(btn);
