@@ -1,6 +1,7 @@
 /* issues to be adddressed:
 
 - the "." behavior is incorrect *SOLVED*
+- display properties
 - the button sizing is inconsistent
 - fix addition/subtraction behavior *solved*
 - fix after calculation behavior *SOLVED*
@@ -20,7 +21,7 @@ window.onload = () => {
   makeButtons();
 }
 
-function applyClick(x) {
+function applyClick(x) { //all our clicking behaviors for buttons
   let btn = document.getElementById("b" + x);
   let totalArea = document.getElementById("totalArea");
   let currentArea = document.getElementById("currentArea");
@@ -37,13 +38,13 @@ function applyClick(x) {
         if (!isNaN(x)){ //if there is pre-existing numbers after hitting equals then delete
           currentArea.textContent = "";
         }
-        //currentArea.textContent = (!isNaN(totalEntry)) ? currentArea.textContent + totalEntry : x;
         totalArea.textContent = "";
         currentEntry = [];
         totalEntry = [];
         equals = false;
       }
-     //restricts input length to 17
+
+     //first we restrict input length to 17
      if(currentArea.textContent.length > 17 || totalArea.textContent.length > 17){
       alert("Number Limit Reached!");
       currentArea.textContent = "";
@@ -56,60 +57,43 @@ function applyClick(x) {
            //is this code doing anything?
            currentArea.textContent = (currentArea.textContent == "0") ?  x :  currentArea.textContent + x;
       } else if (isNaN(x)) { //**for all non numerics**\\
-        if(equals){ //if equals is pressed
+
+        if(equals){ //restricts equals being pressedtwice
           return;
         } else {
-          if(regexOperands.test(x)){ //for operators
 
-          if(regexOperands.test(currentEntry[0])){
-            //if there is ALREADy an operator do nothing
-            return;
-          } else if (x === "=") { //to get answer
-              speech.style.display = "block";
-              document.getElementById("face-sleep").style.display = "none";
-              document.getElementById("numberArea").style.display = "none";
-              document.getElementById("face-happy").style.display = "block";
-
-              currentEntry = filterUserInput(x);
-
-              //this is where the while statements were
-              var test = operateOnEntry(currentEntry);
-              equals = true;
-              totalEntry = currentEntry[0];
-              document.getElementById("equation").textContent = totalArea.textContent;
-              document.getElementById("solution").textContent = currentEntry[0];
-              currentArea.textContent = totalEntry;
-              totalArea.textContent = totalEntry;
-          }
-          else { //this is default operator behavior
-             let lastEntry = filterUserInput(x);
-             //limits operator from printing if there is a pre-existing operator as last user input
-             currentArea.textContent = (regexOperands.test(lastEntry)) ? currentArea.textContent : currentArea.textContent + x;
-          }
-
+        if (x === "=") { //to get answer
+            changeDisplay(x);
+            // currentEntry = currentArea.textContent;
+            currentEntry = filterUserInput(x);
+            console.log(currentEntry);
+            var test = operateOnEntry(currentEntry);
+            equals = true;
+            totalEntry = currentEntry[0];
+            document.getElementById("equation").textContent = totalArea.textContent;
+            document.getElementById("solution").textContent = currentEntry[0];
+            currentArea.textContent = totalEntry;
+            totalArea.textContent = totalEntry;
         } else if (x === ".") {
-          let lastEntry = filterUserInput(x);
-          if(!lastEntry.includes(".")){ //test for pre-existing period
-            currentArea.textContent = currentArea.textContent + x;
-          }
-          //this needs to behave similar to a number but cant use more than one
+            let lastEntry = filterUserInput(x);
+            if(!lastEntry.includes(".")){ //test for pre-existing period
+              currentArea.textContent = currentArea.textContent + x;
+            }
         } else if (x === "AC" || x === "CE") {
-          document.getElementById('face-happy').style.display = "none";
-          //equals = true;
-          //currentArea.textContent = ""
           if (x === "AC"){
-          totalEntry = [] ;
-          currentEntry = [];
-          currentArea.textContent = "";
-          totalArea.textContent = "";
-        } else if (x === "CE"){
-          let clearedLastEntry = filterUserInput(x);
-          currentArea.textContent = clearedLastEntry.join('');
-        }
-        } else {
-        currentArea.textContent = x;
-        totalArea.textContent = (totalArea.textContent + x);
-        currentEntry = x;
+            changeDisplay(x);
+            totalEntry = [] ;
+            currentEntry = [];
+            currentArea.textContent = "";
+            totalArea.textContent = "";
+          } else if (x === "CE"){
+            let clearedLastEntry = filterUserInput(x);
+            currentArea.textContent = clearedLastEntry.join('');
+          }
+        } else { //this is default operator behavior
+           let lastEntry = filterUserInput(x);
+           //limits operators from printing if there is a pre-existing operator as last user input
+           currentArea.textContent = (regexOperands.test(lastEntry)) ? currentArea.textContent : currentArea.textContent + x;
       }
     }
    }
@@ -117,6 +101,7 @@ function applyClick(x) {
  }
 
 function operateOnEntry(userEntry){
+   //this is where the calculations occur when hitting =
   let a, b, c, index;
     if(userEntry.includes("x")){
         index = userEntry.indexOf('x');
@@ -167,6 +152,17 @@ function filterUserInput(x) {
   } else {
     testCurrentEntry = currentArea.textContent.split('');
     return testCurrentEntry.pop();
+  }
+}
+
+function changeDisplay (btn) {
+  if (btn == "=") {
+    speech.style.display = "block";
+    document.getElementById("face-sleep").style.display = "none";
+    document.getElementById("numberArea").style.display = "none";
+    document.getElementById("face-happy").style.display = "block";
+  } else if (btn == 'AC') {
+    document.getElementById('face-happy').style.display = "block";
   }
 }
 
