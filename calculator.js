@@ -2,7 +2,7 @@
 
 - the "." behavior is incorrect *SOLVED*
 - the button sizing is inconsistent
-- fix addition/subtraction behavior
+- fix addition/subtraction behavior *solved*
 - fix after calculation behavior *SOLVED*
 - redundant double code *SOLVED*
 - CE behavior *SOLVED*
@@ -43,15 +43,15 @@ function applyClick(x) {
         totalEntry = [];
         equals = false;
       }
-
-     if(currentArea.textContent.length > 17 || totalArea.textContent.length > 17){ //restrict input length
+     //restricts input length to 17
+     if(currentArea.textContent.length > 17 || totalArea.textContent.length > 17){
       alert("Number Limit Reached!");
       currentArea.textContent = "";
       totalArea.textContent = "";
       totalEntry = []
       currentEntry = [];
       equals = true;
-     }  else if(!isNaN(x)) { //test for number
+     } else if(!isNaN(x)) { //test for number
            equals = false;
            //is this code doing anything?
            currentArea.textContent = (currentArea.textContent == "0") ?  x :  currentArea.textContent + x;
@@ -72,39 +72,8 @@ function applyClick(x) {
 
               currentEntry = filterUserInput(x);
 
-                while(currentEntry.includes("x") || currentEntry.includes("/")){
-                  if(currentEntry.includes("x")){
-                    let index = currentEntry.indexOf("x");
-                    let a = currentEntry[index - 1];
-                    let b = currentEntry[index + 1];
-                    let c =  a * b;
-                    //so how to inject into proper place in array?
-                    currentEntry.splice((index - 1),3,c);
-                  } else {
-                    let index = currentEntry.indexOf("/");
-                    let a = currentEntry[index - 1];
-                    let b = currentEntry[index + 1];
-                    let c =  a / b;
-                    //injecting new total here
-                    currentEntry.splice((index - 1),3,c);
-                  }
-                }
-                while(currentEntry.includes("+") || currentEntry.includes("-")){
-                  if(currentEntry.includes("+")){
-                    let index = currentEntry.indexOf("+");
-                    let a = Number(currentEntry[index - 1]);
-                    let b = Number(currentEntry[index + 1]);
-                    let c =  a + b;
-                    currentEntry.splice((index - 1),3,c);
-                  } else if (currentEntry.includes('-')) {
-                    let index = currentEntry.indexOf("-");
-                    let a = currentEntry[index - 1];
-                    let b = currentEntry[index + 1];
-                    let c =  a - b;
-                    //injecting new total here
-                    currentEntry.splice((index - 1),3,c);
-                  }
-                }
+              //this is where the while statements were
+              var test = operateOnEntry(currentEntry);
               equals = true;
               totalEntry = currentEntry[0];
               document.getElementById("equation").textContent = totalArea.textContent;
@@ -130,6 +99,8 @@ function applyClick(x) {
           //currentArea.textContent = ""
           if (x === "AC"){
           totalEntry = [] ;
+          currentEntry = [];
+          currentArea.textContent = "";
           totalArea.textContent = "";
         } else if (x === "CE"){
           let clearedLastEntry = filterUserInput(x);
@@ -145,7 +116,42 @@ function applyClick(x) {
   }
  }
 
+function operateOnEntry(userEntry){
+  let a, b, c, index;
+    if(userEntry.includes("x")){
+        index = userEntry.indexOf('x');
+        a = Number(userEntry[index - 1]);
+        b = Number(userEntry[index + 1]);
+        c = a * b;
+        userEntry.splice((index - 1),3,c);
+        return operateOnEntry(userEntry);
+    } else if (userEntry.includes("/")) {
+        index = userEntry.indexOf('/');
+        a = Number(userEntry[index - 1]);
+        b = Number(userEntry[index + 1]);
+        c = a / b;
+        userEntry.splice((index - 1),3,c);
+        return operateOnEntry(userEntry);
+    } else if (currentEntry.includes("+") || currentEntry.includes("-")){
+      index = userEntry[1];
+      a = Number(userEntry[0]);
+      b = Number(userEntry[2]);
+      console.log("index: " + index);
+      if(index == '+'){
+        c = a + b;
+        userEntry.splice(0,3,c);
+        return operateOnEntry(userEntry);
+      } else {
+        c = a - b;
+        userEntry.splice(0,3,c);
+        return operateOnEntry(userEntry);
+      }
+    }
+    return userEntry;
+ }
+
 function filterUserInput(x) {
+  //this function converts the user input into an array
   let testCurrentEntry;
   if(x==="."){
     testCurrentEntry = currentArea.textContent.split(regexOperands);
