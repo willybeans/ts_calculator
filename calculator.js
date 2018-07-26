@@ -1,22 +1,22 @@
 /* issues to be adddressed:
-
 - the "." behavior is incorrect *SOLVED*
-- display properties
-- the button sizing is inconsistent
+- display properties *solved*
+- the button sizing is inconsistent *solved*
 - fix addition/subtraction behavior *solved*
 - fix after calculation behavior *SOLVED*
 - redundant double code *SOLVED*
 - CE behavior *SOLVED*
---im suspiscious that the display stuff is ghetto rigged my man *solved*
 */
 
-var buttons = ['CE','AC', 'x','7','8','9','/','4','5','6',
+const buttons = ['CE','AC', 'x','7','8','9','/','4','5','6',
                '-','1','2','3','+','0','.','='];
+
 var currentEntry = [], totalEntry = [];
-var testNum = /[0-9]/g;
-var regexOperands = /[+\-\/x=]/;
-var regexPeriod = /./;
 var equals = true;
+
+const testNum = /[0-9]/g;
+const regexOperands = /[+\-\/x=]/;
+const regexPeriod = /./;
 
 const totalArea = document.getElementById("totalArea");
 const currentArea = document.getElementById("currentArea");
@@ -38,6 +38,7 @@ function applyClick(x) { //all our clicking behaviors for buttons
         if (!isNaN(x)){ //if there is pre-existing numbers after hitting equals then delete
           currentArea.textContent = '';
         } else {
+          //places total from previous calculation as first entry
           currentArea.textContent = totalEntry;
         }
         totalArea.textContent = '';
@@ -45,14 +46,11 @@ function applyClick(x) { //all our clicking behaviors for buttons
         totalEntry = [];
         equals = false;
       }
-
      //first we restrict input length to 17
      if(currentArea.textContent.length > 17 || totalArea.textContent.length > 17){
       alert("Number Limit Reached!");
       currentArea.textContent = "";
       totalArea.textContent = "";
-      totalEntry = []
-      currentEntry = [];
       equals = true;
      } else if(!isNaN(x)) { //test for number
            equals = false;
@@ -66,13 +64,14 @@ function applyClick(x) { //all our clicking behaviors for buttons
 
         if (x === "=") { //to get answer
             currentEntry = filterUserInput(x);
-            var test = currentArea.textContent;
-            console.log(currentEntry);
-            var total = operateOnEntry(currentEntry);
+            let saveUserInput = currentArea.textContent;
+            console.log("before: " + currentEntry);
+            operateOnEntry(currentEntry);
+            console.log("after: " + currentEntry);
             equals = true;
             totalEntry = currentEntry[0];
-            currentArea.textContent = test;
-            totalArea.textContent = total;
+            currentArea.textContent = saveUserInput;
+            totalArea.textContent = currentEntry;
         } else if (x === ".") {
             let lastEntry = filterUserInput(x);
             if(!lastEntry.includes(".")){ //test for pre-existing period
@@ -81,8 +80,6 @@ function applyClick(x) { //all our clicking behaviors for buttons
         } else if (x === "AC" || x === "CE") {
           if (x === "AC"){
             changeDisplay(x);
-            totalEntry = [] ;
-            currentEntry = [];
             currentArea.textContent = "";
             totalArea.textContent = "";
           } else if (x === "CE"){
