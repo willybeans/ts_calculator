@@ -7,6 +7,7 @@
 - fix after calculation behavior *SOLVED*
 - redundant double code *SOLVED*
 - CE behavior *SOLVED*
+--im suspiscious that the display stuff is ghetto rigged my man *solved*
 */
 
 var buttons = ['CE','AC', 'x','7','8','9','/','4','5','6',
@@ -17,28 +18,29 @@ var regexOperands = /[+\-\/x=]/;
 var regexPeriod = /./;
 var equals = true;
 
+const totalArea = document.getElementById("totalArea");
+const currentArea = document.getElementById("currentArea");
+const numberArea = document.getElementById("numberArea");
+const faceHappy = document.getElementById("face-happy");
+
 window.onload = () => {
   makeButtons();
 }
 
 function applyClick(x) { //all our clicking behaviors for buttons
   let btn = document.getElementById("b" + x);
-  let totalArea = document.getElementById("totalArea");
-  let currentArea = document.getElementById("currentArea");
-  let speech = document.getElementById("speech");
 
   btn.onclick = () => {
     let totalAreaLength = totalArea.textContent.length;
     //first we clear the face
-    speech.style.display = "none";
-    document.getElementById("numberArea").style.display = "block";
-
+    changeDisplay(x);
        if(equals){ //clear after =, or for first entry
-        document.getElementById("face-sleep").style.display = "none";
         if (!isNaN(x)){ //if there is pre-existing numbers after hitting equals then delete
-          currentArea.textContent = "";
+          currentArea.textContent = '';
+        } else {
+          currentArea.textContent = totalEntry;
         }
-        totalArea.textContent = "";
+        totalArea.textContent = '';
         currentEntry = [];
         totalEntry = [];
         equals = false;
@@ -63,17 +65,14 @@ function applyClick(x) { //all our clicking behaviors for buttons
         } else {
 
         if (x === "=") { //to get answer
-            changeDisplay(x);
-            // currentEntry = currentArea.textContent;
             currentEntry = filterUserInput(x);
+            var test = currentArea.textContent;
             console.log(currentEntry);
-            var test = operateOnEntry(currentEntry);
+            var total = operateOnEntry(currentEntry);
             equals = true;
             totalEntry = currentEntry[0];
-            document.getElementById("equation").textContent = totalArea.textContent;
-            document.getElementById("solution").textContent = currentEntry[0];
-            currentArea.textContent = totalEntry;
-            totalArea.textContent = totalEntry;
+            currentArea.textContent = test;
+            totalArea.textContent = total;
         } else if (x === ".") {
             let lastEntry = filterUserInput(x);
             if(!lastEntry.includes(".")){ //test for pre-existing period
@@ -156,13 +155,15 @@ function filterUserInput(x) {
 }
 
 function changeDisplay (btn) {
+  numberArea.style.display = 'block';
   if (btn == "=") {
-    speech.style.display = "block";
-    document.getElementById("face-sleep").style.display = "none";
-    document.getElementById("numberArea").style.display = "none";
-    document.getElementById("face-happy").style.display = "block";
+    //speech.style.display = "block";
+  //  document.getElementById("face-sleep").style.display = "none";
+  //  document.getElementById("numberArea").style.display = "none";
+//    document.getElementById("face-happy").style.display = "block";
   } else if (btn == 'AC') {
-    document.getElementById('face-happy').style.display = "block";
+    numberArea.style.display = 'none';
+    faceHappy.style.display = "block";
   }
 }
 

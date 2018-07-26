@@ -1,0 +1,126 @@
+#speech{
+    overflow-wrap: break-word;
+  word-wrap: break-word;
+  display: none;
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  width: 30%;
+  height: 30%;
+  z-index: 10;
+}
+.speech-bubble{
+  background: white;
+  border: 1px solid black;
+  border-radius: 15%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0%;
+  top: 0%;
+  z-index: 12
+}
+.speech-point{
+  background: white;
+  position: absolute;
+  border: 1px solid black;
+  bottom: 0%;
+  left: 0%;
+  width: 20%;
+  height: 20%;
+  z-index: 11;
+}
+.speech-point-copy{
+  background: white;
+  position: absolute;
+  bottom: 1%;
+  left: 1%;
+  width: 20%;
+  height: 20%;
+  z-index: 13;
+}
+#solution{
+  position: absolute;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  font-size: 1em;
+  top: 50%;
+  right: 0%;
+  width: 100%;
+  height: 40%;
+}
+#equation{
+  position: absolute;
+  text-align: center;
+  top: 5%;
+  left: 0%;
+  width: 100%;
+  height:30%;
+}
+#equals{
+  position: absolute;
+  font-size: 1.5em;
+  text-align: center;
+  top: 30%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+}
+
+<div id="speech">
+  <div class="speech-point"></div>
+  <div class="speech-point-copy"></div>
+      <div class="speech-bubble">
+        <div id="equation"> </div>
+        <div id="equals">=</div>
+        <div id="solution"> </div>
+     </div>
+</div>
+
+<!-- yo dis is for sleep face bmo  -->
+
+.face-sleep{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  padding-right: 5px;
+  border-radius: 5px;
+  background-color: #c4f8dd;
+  border: 1px solid black;
+  box-shadow: 1px 1px 2px inset grey;
+}
+.eye-left-sleep{
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  left: 25%;
+  top: 30%;
+  width:15%;
+  height: 10%;
+}
+.eye-right-sleep{
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  right: 25%;
+  top: 30%;
+  width:15%;
+  height: 10%;
+}
+.mouth-sleep{
+  border: solid 1px #000;
+  border-color: #000 transparent transparent transparent;
+  border-radius: 100%/100px 100px 0 0;
+  position: absolute;
+  right: 40%;
+  top: 65%;
+  width: 20%;
+  height: 5%;
+}
+
+   <div class="face-sleep" id="face-sleep">
+     <div class="eye-left-sleep"></div>
+     <div class="eye-right-sleep"></div>
+     <div class="mouth-sleep"></div>
+   </div>
