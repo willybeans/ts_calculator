@@ -153,12 +153,7 @@ function filterUserInput(x) {
 
 function changeDisplay (btn) {
   numberArea.style.display = 'block';
-  if (btn == "=") {
-    //speech.style.display = "block";
-  //  document.getElementById("face-sleep").style.display = "none";
-  //  document.getElementById("numberArea").style.display = "none";
-//    document.getElementById("face-happy").style.display = "block";
-  } else if (btn == 'AC') {
+  if (btn == 'AC') {
     numberArea.style.display = 'none';
     faceHappy.style.display = "block";
   }
