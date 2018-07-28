@@ -1,22 +1,12 @@
-/* issues to be adddressed:
-- the "." behavior is incorrect *SOLVED*
-- display properties *solved*
-- the button sizing is inconsistent *solved*
-- fix addition/subtraction behavior *solved*
-- fix after calculation behavior *SOLVED*
-- redundant double code *SOLVED*
-- CE behavior *SOLVED*
-*/
-
 const buttons = ['CE','AC', 'x','7','8','9','/','4','5','6',
                '-','1','2','3','+','0','.','='];
 
 var currentEntry = [], totalEntry = [];
 var equals = true;
 
-const testNum = /[0-9]/g;
+//const testNum = /[0-9]/g;
 const regexOperands = /[+\-\/x=]/;
-const regexPeriod = /./;
+//const regexPeriod = /./;
 
 const totalArea = document.getElementById("totalArea");
 const currentArea = document.getElementById("currentArea");
@@ -27,15 +17,15 @@ window.onload = () => {
   makeButtons();
 }
 
-function applyClick(x) { //all our clicking behaviors for buttons
-  let btn = document.getElementById("b" + x);
+function applyClick(userInput) { //all our clicking behaviors for buttons
+  let btn = document.getElementById("b" + userInput);
 
   btn.onclick = () => {
     let totalAreaLength = totalArea.textContent.length;
     //first we clear the face
-    changeDisplay(x);
+    changeDisplay(userInput);
        if(equals){ //clear after =, or for first entry
-        if (!isNaN(x)){ //if there is pre-existing numbers after hitting equals then delete
+        if (!isNaN(userInput)){ //if there is pre-existing numbers after hitting equals then delete
           currentArea.textContent = '';
         } else {
           //places total from previous calculation as first entry
@@ -52,44 +42,39 @@ function applyClick(x) { //all our clicking behaviors for buttons
       currentArea.textContent = "";
       totalArea.textContent = "";
       equals = true;
-     } else if(!isNaN(x)) { //test for number
-           equals = false;
-           //is this code doing anything?
-           currentArea.textContent = (currentArea.textContent == "0") ?  x :  currentArea.textContent + x;
-      } else if (isNaN(x)) { //**for all non numerics**\\
-
-        if(equals){ //restricts equals being pressedtwice
+     } else if(!isNaN(userInput)) { //test for number
+        equals = false;
+        currentArea.textContent = (currentArea.textContent == "0") ?  userInput :  currentArea.textContent + userInput;
+      } else if (isNaN(userInput)) { //**for all non numerics**\\
+        if(equals){ //restricts equals being pressed twice
           return;
         } else {
-
-        if (x === "=") { //to get answer
-            currentEntry = filterUserInput(x);
+        if (userInput === "=") { //to get answer
+            currentEntry = filterUserInput(userInput);
             let saveUserInput = currentArea.textContent;
-            console.log("before: " + currentEntry);
             operateOnEntry(currentEntry);
-            console.log("after: " + currentEntry);
             equals = true;
-            totalEntry = currentEntry[0];
-            currentArea.textContent = saveUserInput;
-            totalArea.textContent = currentEntry;
-        } else if (x === ".") {
-            let lastEntry = filterUserInput(x);
+            totalEntry = currentEntry[0]; //will save answer for next calculation
+            currentArea.textContent = saveUserInput; //will display equation
+            totalArea.textContent = currentEntry; //will display answer
+        } else if (userInput === ".") {
+            let lastEntry = filterUserInput(userInput);
             if(!lastEntry.includes(".")){ //test for pre-existing period
-              currentArea.textContent = currentArea.textContent + x;
+              currentArea.textContent = currentArea.textContent + userInput;
             }
-        } else if (x === "AC" || x === "CE") {
-          if (x === "AC"){
-            changeDisplay(x);
+        } else if (userInput === "AC" || userInput === "CE") {
+          if (userInput === "AC"){
+            changeDisplay(userInput);
             currentArea.textContent = "";
             totalArea.textContent = "";
-          } else if (x === "CE"){
-            let clearedLastEntry = filterUserInput(x);
+          } else if (userInput === "CE"){
+            let clearedLastEntry = filterUserInput(userInput);
             currentArea.textContent = clearedLastEntry.join('');
           }
         } else { //this is default operator behavior
-           let lastEntry = filterUserInput(x);
+           let lastEntry = filterUserInput(userInput);
            //limits operators from printing if there is a pre-existing operator as last user input
-           currentArea.textContent = (regexOperands.test(lastEntry)) ? currentArea.textContent : currentArea.textContent + x;
+           currentArea.textContent = (regexOperands.test(lastEntry)) ? currentArea.textContent : currentArea.textContent + userInput;
       }
     }
    }
@@ -131,17 +116,17 @@ function operateOnEntry(userEntry){
     return userEntry;
  }
 
-function filterUserInput(x) {
+function filterUserInput(userInput) {
   //this function converts the user input into an array
   let testCurrentEntry;
-  if(x==="."){
+  if(userInput==="."){
     testCurrentEntry = currentArea.textContent.split(regexOperands);
     return testCurrentEntry.pop();
-  } else if(x==="=") {
+  } else if(userInput==="=") {
     testCurrentEntry = currentArea.textContent;//.split(regexOperands)
     testCurrentEntry = testCurrentEntry.split(/([+\-\/x=])/g);
     return testCurrentEntry;
-  } else if (x==="CE"){
+  } else if (userInput==="CE"){
     testCurrentEntry = currentArea.textContent.split("");
     testCurrentEntry.pop()
     return testCurrentEntry;
@@ -151,9 +136,9 @@ function filterUserInput(x) {
   }
 }
 
-function changeDisplay (btn) {
+function changeDisplay (userInput) {
   numberArea.style.display = 'block';
-  if (btn == 'AC') {
+  if (userInput == 'AC') {
     numberArea.style.display = 'none';
     faceHappy.style.display = "block";
   }
