@@ -76,29 +76,21 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
     }
 }
 
-let calculatorOperations = {
-    'x': (arg1, arg2) => {
-        return arg1 * arg2;
-    },
-    '/': (arg1, arg2) => {
-        return arg1 / arg2;
-    },
-    '+': (arg1, arg2) => {
-        return arg1 + arg2;
-    },
-    '-': (arg1, arg2) => {
-        return arg1 - arg2;
-    },
-    returnIndexOfEntry: (index, userEntry) => {
+const calculatorOperations = {
+    'x': (arg1, arg2) => return arg1 * arg2,
+    '/': (arg1, arg2) => return arg1 / arg2,
+    '+': (arg1, arg2) => return arg1 + arg2,
+    '-': (arg1, arg2) => return arg1 - arg2,
+    returnIndexOfEntry(index, userEntry) {
         let arg1 = Number(userEntry[index - 1]);
         let arg2 = Number(userEntry[index + 1]);
         return [arg1, arg2];
     },
-    returnSpliced: (index, newTotal, userEntry) => {
+    returnSpliced(index, newTotal, userEntry) {
         userEntry.splice((index - 1), 3, newTotal);
         return userEntry;
     },
-    calculationSequence: (operation, indexOfOperand, userEntry) => {
+    calculationSequence (operation, indexOfOperand, userEntry) {
 
         let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
         let newTotalForEntry = calculatorOperations[operation](getArgs[0], getArgs[1]);
