@@ -6,9 +6,9 @@ window.onload = () => {
 }
 
 function applyClick(userInput) { //all our clicking behaviors for buttons
-    let btn = document.getElementById("b" + userInput);
-    const currentArea = document.getElementById("currentArea");
-    const totalArea = document.getElementById("totalArea");
+    let btn = document.getElementById('b' + userInput);
+    const currentArea = document.getElementById('currentArea');
+    const totalArea = document.getElementById('totalArea');
 
     btn.onclick = () => {
         let totalAreaLength = totalArea.textContent.length;
@@ -28,13 +28,13 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
         }
         //restrict input length to 17
         if (currentArea.textContent.length > 17 || totalArea.textContent.length > 17) {
-            alert("Number Limit Reached!");
-            currentArea.textContent = "";
-            totalArea.textContent = "";
+            alert('Number Limit Reached!');
+            currentArea.textContent = '';
+            totalArea.textContent = '';
             equals = true;
         } else if (!isNaN(userInput)) { //test for number
             equals = false;
-            currentArea.textContent = (currentArea.textContent == "0") ? userInput : currentArea.textContent + userInput;
+            currentArea.textContent = (currentArea.textContent == '0') ? userInput : currentArea.textContent + userInput;
         } else if (isNaN(userInput)) { //**for all non numerics**\\
             if (equals) { //restricts equals being pressed twice
                 return;
@@ -43,7 +43,7 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
                 switch (userInput) {
                     case '.':
                         let previousEntry = filterUserInput(userInput);
-                        if (!previousEntry.includes(".")) { //test for pre-existing period
+                        if (!previousEntry.includes('.')) { //test for pre-existing period
                             currentArea.textContent = currentArea.textContent + userInput;
                         }
                         break;
@@ -58,8 +58,8 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
                         break;
                     case 'AC':
                         changeDisplay(userInput);
-                        currentArea.textContent = "";
-                        totalArea.textContent = "";
+                        currentArea.textContent = '';
+                        totalArea.textContent = '';
                         break;
                     case 'CE':
                         let clearedLastEntry = filterUserInput(userInput);
@@ -76,44 +76,109 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
     }
 }
 
+let calculatorOperations = {
+  'x': (arg1, arg2) => {
+      return arg1 * arg2;
+  },
+  '/': (arg1, arg2) => {
+      return arg1 / arg2;
+  },
+  '+': (arg1, arg2) => {
+    return arg1 + arg2;
+  },
+  '-': (arg1, arg2) => {
+    return arg1 - arg2;
+  },
+  returnIndexOfEntry: (index, userEntry) => {
+    let arg1 = Number(userEntry[index - 1]);
+    let arg2 = Number(userEntry[index + 1]);
+    return [arg1,arg2];
+  },
+  returnSpliced: (index, newTotal, userEntry) => {
+    userEntry.splice((index - 1), 3, newTotal);
+    return userEntry;
+  },
+  calculationSequence: (operation, indexOfOperand, userEntry) => {
+
+    let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
+    let newTotalForEntry = calculatorOperations[operation](getArgs[0], getArgs[1]);
+    let newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
+    return newUserEntry;
+  }
+};
+
 function operateOnEntry(userEntry) {
     //this is where the calculations occur when hitting =
-    let a, b, c, index;
-    if (userEntry.includes("x")) {
-        index = userEntry.indexOf('x');
-        a = Number(userEntry[index - 1]);
-        b = Number(userEntry[index + 1]);
-        c = a * b;
-        userEntry.splice((index - 1), 3, c);
-        return operateOnEntry(userEntry);
-    } else if (userEntry.includes("/")) {
-        index = userEntry.indexOf('/');
-        a = Number(userEntry[index - 1]);
-        b = Number(userEntry[index + 1]);
-        c = a / b;
-        userEntry.splice((index - 1), 3, c);
-        return operateOnEntry(userEntry);
-    } else if (userEntry.includes("+") || userEntry.includes("-")) {
-        index = userEntry[1];
-        a = Number(userEntry[0]);
-        b = Number(userEntry[2]);
-        if (index == '+') {
-            c = a + b;
-            userEntry.splice(0, 3, c);
-            return operateOnEntry(userEntry);
-        } else {
-            c = a - b;
-            userEntry.splice(0, 3, c);
-            return operateOnEntry(userEntry);
+    const operations = ['x', '/', '+', '-'];
+    let indexOfOperand;
+    let newUserEntry;
+
+    for (let i = 0; i < operations.length; i++) {
+
+      while( userEntry.includes('x') || userEntry.includes('/')) {
+          console.log('user entry: ' + userEntry);
+          console.log('prop: ' + operations[i]);
+          indexOfOperand = userEntry.indexOf(operations[i]);
+          console.log(indexOfOperand);
+          userEntry = calculatorOperations
+                      .calculationSequence(operations[i],indexOfOperand,userEntry);
+          //send index, userEntry...the rest can be done inside
+          // let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
+          // let newTotalForEntry = calculatorOperations[operations[i]](getArgs[0], getArgs[1]);
+          // //let newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
+          // //return operateOnEntry(newUserEntry);
+          // newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
+          console.log('after ' + userEntry);
         }
-    }
-    return userEntry;
+        while ( userEntry.includes('+') || userEntry.includes('-') ) {
+          indexOfOperand =  1;
+
+          userEntry = calculatorOperations
+                      .calculationSequence(userEntry[1],indexOfOperand,userEntry);
+                      console.log('after +-' + userEntry);
+        }
+      }
+
+
+
+    let a, b, c;
+    // if (userEntry.includes('x')) {
+    //
+    //     index = userEntry.indexOf('x');
+    //     let getArgs = calculatorOperations.returnIndexOfEntry(index, userEntry);
+    //     let newTotalForEntry = calculatorOperations['x'](getArgs[0], getArgs[1]);
+    //     let newUserEntry = calculatorOperations.returnSpliced(index, newTotalForEntry, userEntry);
+    //     return operateOnEntry(newUserEntry);
+    //
+    // } else if (userEntry.includes('/')) {
+    //
+    //     index = userEntry.indexOf('/');
+    //     let getArgs = calculatorOperations.returnIndexOfEntry(index, userEntry);
+    //     let newTotalForEntry = calculatorOperations['/'](getArgs[0], getArgs[1]);
+    //     let newUserEntry = calculatorOperations.returnSpliced(index, newTotalForEntry, userEntry);
+    //     return operateOnEntry(newUserEntry);
+    //
+    // } else if (userEntry.includes('+') || userEntry.includes('-')) {
+    //     index = userEntry[1];
+    //     a = Number(userEntry[0]);
+    //     b = Number(userEntry[2]);
+    //     if (index == '+') {
+    //         c = a + b;
+    //         userEntry.splice(0, 3, c);
+    //         return operateOnEntry(userEntry);
+    //     } else {
+    //         c = a - b;
+    //         userEntry.splice(0, 3, c);
+    //         return operateOnEntry(userEntry);
+    //     }
+    // }
+    return newUserEntry;
 }
 
 function filterUserInput(userInput) {
     //this function converts the user input into an array
     const regexOperands = /[+\-\/x=]/;
-    const currentArea = document.getElementById("currentArea");
+    const currentArea = document.getElementById('currentArea');
     let testCurrentEntry;
     switch (userInput) {
         case '.':
@@ -124,7 +189,7 @@ function filterUserInput(userInput) {
             testCurrentEntry = testCurrentEntry.split(/([+\-\/x=])/g);
             break;
         case 'CE':
-            testCurrentEntry = currentArea.textContent.split("");
+            testCurrentEntry = currentArea.textContent.split('');
             testCurrentEntry.pop()
             break;
         default:
@@ -136,12 +201,12 @@ function filterUserInput(userInput) {
 }
 
 function changeDisplay(userInput) {
-    const faceHappy = document.getElementById("face-happy");
-    const numberArea = document.getElementById("numberArea");
+    const faceHappy = document.getElementById('face-happy');
+    const numberArea = document.getElementById('numberArea');
     numberArea.style.display = 'block';
     if (userInput == 'AC') {
         numberArea.style.display = 'none';
-        faceHappy.style.display = "block";
+        faceHappy.style.display = 'block';
     }
 }
 
@@ -151,11 +216,11 @@ function makeButtons() {
     ];
 
     for (let i = 0; i < buttons.length; i++) {
-        let btn = document.createElement("BUTTON");
+        let btn = document.createElement('BUTTON');
         let t = document.createTextNode(buttons[i]);
         let container = document.getElementById('container');
-        btn.id = "b" + buttons[i];
-        btn.className = "button";
+        btn.id = 'b' + buttons[i];
+        btn.className = 'button';
         btn.appendChild(t);
         container.appendChild(btn);
         applyClick(buttons[i]);
