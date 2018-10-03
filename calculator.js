@@ -77,102 +77,57 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
 }
 
 let calculatorOperations = {
-  'x': (arg1, arg2) => {
-      return arg1 * arg2;
-  },
-  '/': (arg1, arg2) => {
-      return arg1 / arg2;
-  },
-  '+': (arg1, arg2) => {
-    return arg1 + arg2;
-  },
-  '-': (arg1, arg2) => {
-    return arg1 - arg2;
-  },
-  returnIndexOfEntry: (index, userEntry) => {
-    let arg1 = Number(userEntry[index - 1]);
-    let arg2 = Number(userEntry[index + 1]);
-    return [arg1,arg2];
-  },
-  returnSpliced: (index, newTotal, userEntry) => {
-    userEntry.splice((index - 1), 3, newTotal);
-    return userEntry;
-  },
-  calculationSequence: (operation, indexOfOperand, userEntry) => {
+    'x': (arg1, arg2) => {
+        return arg1 * arg2;
+    },
+    '/': (arg1, arg2) => {
+        return arg1 / arg2;
+    },
+    '+': (arg1, arg2) => {
+        return arg1 + arg2;
+    },
+    '-': (arg1, arg2) => {
+        return arg1 - arg2;
+    },
+    returnIndexOfEntry: (index, userEntry) => {
+        let arg1 = Number(userEntry[index - 1]);
+        let arg2 = Number(userEntry[index + 1]);
+        return [arg1, arg2];
+    },
+    returnSpliced: (index, newTotal, userEntry) => {
+        userEntry.splice((index - 1), 3, newTotal);
+        return userEntry;
+    },
+    calculationSequence: (operation, indexOfOperand, userEntry) => {
 
-    let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
-    let newTotalForEntry = calculatorOperations[operation](getArgs[0], getArgs[1]);
-    let newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
-    return newUserEntry;
-  }
+        let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
+        let newTotalForEntry = calculatorOperations[operation](getArgs[0], getArgs[1]);
+        let newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
+        return newUserEntry;
+    }
 };
 
 function operateOnEntry(userEntry) {
     //this is where the calculations occur when hitting =
-    const operations = ['x', '/', '+', '-'];
+    const operationsMD = ['x', '/'];
     let indexOfOperand;
-    let newUserEntry;
+    let operation;
 
-    for (let i = 0; i < operations.length; i++) {
-
-      while( userEntry.includes('x') || userEntry.includes('/')) {
-          console.log('user entry: ' + userEntry);
-          console.log('prop: ' + operations[i]);
-          indexOfOperand = userEntry.indexOf(operations[i]);
-          console.log(indexOfOperand);
-          userEntry = calculatorOperations
-                      .calculationSequence(operations[i],indexOfOperand,userEntry);
-          //send index, userEntry...the rest can be done inside
-          // let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
-          // let newTotalForEntry = calculatorOperations[operations[i]](getArgs[0], getArgs[1]);
-          // //let newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
-          // //return operateOnEntry(newUserEntry);
-          // newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
-          console.log('after ' + userEntry);
+    while (userEntry.includes('x') || userEntry.includes('/')) {
+        let i = 0;
+        if (!userEntry.includes('x')) {
+            i++;
         }
-        while ( userEntry.includes('+') || userEntry.includes('-') ) {
-          indexOfOperand =  1;
-
-          userEntry = calculatorOperations
-                      .calculationSequence(userEntry[1],indexOfOperand,userEntry);
-                      console.log('after +-' + userEntry);
-        }
-      }
-
-
-
-    let a, b, c;
-    // if (userEntry.includes('x')) {
-    //
-    //     index = userEntry.indexOf('x');
-    //     let getArgs = calculatorOperations.returnIndexOfEntry(index, userEntry);
-    //     let newTotalForEntry = calculatorOperations['x'](getArgs[0], getArgs[1]);
-    //     let newUserEntry = calculatorOperations.returnSpliced(index, newTotalForEntry, userEntry);
-    //     return operateOnEntry(newUserEntry);
-    //
-    // } else if (userEntry.includes('/')) {
-    //
-    //     index = userEntry.indexOf('/');
-    //     let getArgs = calculatorOperations.returnIndexOfEntry(index, userEntry);
-    //     let newTotalForEntry = calculatorOperations['/'](getArgs[0], getArgs[1]);
-    //     let newUserEntry = calculatorOperations.returnSpliced(index, newTotalForEntry, userEntry);
-    //     return operateOnEntry(newUserEntry);
-    //
-    // } else if (userEntry.includes('+') || userEntry.includes('-')) {
-    //     index = userEntry[1];
-    //     a = Number(userEntry[0]);
-    //     b = Number(userEntry[2]);
-    //     if (index == '+') {
-    //         c = a + b;
-    //         userEntry.splice(0, 3, c);
-    //         return operateOnEntry(userEntry);
-    //     } else {
-    //         c = a - b;
-    //         userEntry.splice(0, 3, c);
-    //         return operateOnEntry(userEntry);
-    //     }
-    // }
-    return newUserEntry;
+        indexOfOperand = userEntry.indexOf(operationsMD[i]);
+        userEntry = calculatorOperations
+            .calculationSequence(operationsMD[i], indexOfOperand, userEntry);
+    }
+    while (userEntry.includes('+') || userEntry.includes('-')) {
+        indexOfOperand = 1;
+        userEntry = calculatorOperations
+            .calculationSequence(userEntry[1], indexOfOperand, userEntry);
+    }
+    return userEntry;
 }
 
 function filterUserInput(userInput) {
