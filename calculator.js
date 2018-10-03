@@ -93,7 +93,7 @@ const calculatorOperations = {
     calculationSequence (operation, indexOfOperand, userEntry) {
 
         let getArgs = calculatorOperations.returnIndexOfEntry(indexOfOperand, userEntry);
-        let newTotalForEntry = calculatorOperations[operation](getArgs[0], getArgs[1]);
+        let newTotalForEntry = calculatorOperations[operation](...getArgs);
         let newUserEntry = calculatorOperations.returnSpliced(indexOfOperand, newTotalForEntry, userEntry);
         return newUserEntry;
     }
