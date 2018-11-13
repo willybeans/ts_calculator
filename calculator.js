@@ -77,10 +77,10 @@ function applyClick(userInput) { //all our clicking behaviors for buttons
 }
 
 const calculatorOperations = {
-    'x': (arg1, arg2) => return arg1 * arg2,
-    '/': (arg1, arg2) => return arg1 / arg2,
-    '+': (arg1, arg2) => return arg1 + arg2,
-    '-': (arg1, arg2) => return arg1 - arg2,
+    'x': (arg1, arg2) => arg1 * arg2,
+    '/': (arg1, arg2) => arg1 / arg2,
+    '+': (arg1, arg2) => arg1 + arg2,
+    '-': (arg1, arg2) => arg1 - arg2,
     returnIndexOfEntry(index, userEntry) {
         let arg1 = Number(userEntry[index - 1]);
         let arg2 = Number(userEntry[index + 1]);
