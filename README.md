@@ -1,4 +1,4 @@
-# js_calculator
+# ts_calculator
 Can be viewed live at: https://willybeans.github.io/js_calculator/
 
 A calculator written in vanilla javascript.
