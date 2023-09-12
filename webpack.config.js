@@ -1,22 +1,51 @@
 /* tslint:disable */
-const path = require('path');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  // Change to your "entry-point".
-  entry: './src/index',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'app.bundle.js'
+  entry: "./src/index.ts",
+  // watch: true,
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+    ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: [".tsx", ".ts", ".js"],
   },
-  module: {
-    rules: [{
-      // Include ts, tsx, js, and jsx files.
-      test: /\.(ts|js)x?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader',
-    }],
-  }
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    // publicPath: "/assets/",
+  },
+  devServer: {
+    headers: {
+      "Cache-Control": "no-store",
+    },
+    compress: false,
+    static: false,
+    client: {
+      logging: "warn",
+      overlay: {
+        errors: true,
+        warnings: false,
+      },
+      progress: true,
+    },
+    port: 1234,
+    host: "0.0.0.0",
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [{ from: "src/assets", to: "assets/" }],
+    }),
+    new HtmlWebpackPlugin({
+      template: "dist/index.html",
+    }),
+  ],
 };
