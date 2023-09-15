@@ -29,10 +29,11 @@ const calculate: Calculate = {
 };
 
 const calculatorOperationHelpers: CalculatorOperationHelpers = {
-  returnIndexOfEntry: (index, userEntry) => {
-    // this is passed the operator, which then returns the numbers surrounding it
-    return [Number(userEntry[index - 1]), Number(userEntry[index + 1])];
-  },
+  // this is passed the operator, which then returns the numbers surrounding it
+  returnIndexOfEntry: (index, userEntry) => [
+    Number(userEntry[index - 1]),
+    Number(userEntry[index + 1]),
+  ],
   returnSpliced: (index, newTotal, userEntry) => {
     // this splices in the new total from the prev operation
     // cannot use toSpliced() yet
@@ -58,7 +59,7 @@ export function operateOnEntry(userEntry: OperatingArray) {
   const operationsMD = ["x", "/"] as Operations[];
 
   while (userEntry.includes("x") || userEntry.includes("/")) {
-    if (!userEntry.includes("x")) {
+    if (!userEntry.includes("x") && operationsMD.includes("x")) {
       operationsMD.shift();
     }
 
