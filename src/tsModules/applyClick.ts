@@ -1,9 +1,4 @@
-import {
-  changeDisplay,
-  filterUserInput,
-  returnLastEntry,
-  getText,
-} from "./helpers";
+import { changeDisplay, returnLastEntry, getText } from "./helpers";
 import { operateOnEntry } from "./operations";
 
 let equals = true;
@@ -11,7 +6,6 @@ let totalEntry: Array<string | number> = [];
 
 export const applyClick = (userInput: string, btn: HTMLElement): void => {
   //all our clicking behaviors for buttons
-  // let btn = document.getElementById("b" + userInput) as HTMLElement;
   const currentArea = document.getElementById("currentArea") as HTMLElement;
   const totalArea = document.getElementById("totalArea") as HTMLElement;
 
@@ -53,16 +47,20 @@ export const applyClick = (userInput: string, btn: HTMLElement): void => {
         //restricts equals from being pressed twice
         return;
       } else {
+        const regexOperands = /[+\-\/x=]/;
+        const currentUserInputArea = getText("currentArea");
+
         switch (userInput) {
           case ".":
-            let previousEntry = filterUserInput(userInput);
-            if (!previousEntry.includes(".")) {
+            let previousEntry = currentUserInputArea.split(regexOperands);
+            if (!previousEntry[previousEntry.length - 1].includes(".")) {
               //test for pre-existing period
               currentArea.textContent = currentArea.textContent + userInput;
             }
             break;
           case "=":
-            let currentEntry: string[] = filterUserInput(userInput);
+            let currentEntry: string[] =
+              currentUserInputArea.split(/([+\-\/x=])/g);
             let saveUserInput = currentArea.textContent;
             const entryTotal = operateOnEntry(currentEntry);
             equals = true;
@@ -76,12 +74,12 @@ export const applyClick = (userInput: string, btn: HTMLElement): void => {
             totalArea.textContent = "";
             break;
           case "CE":
-            let clearedLastEntry = filterUserInput(userInput);
+            let clearedLastEntry = currentUserInputArea.split("");
+            clearedLastEntry.pop();
             currentArea.textContent = clearedLastEntry.join("");
             break;
           default:
-            let lastEntry: string = returnLastEntry(userInput);
-            const regexOperands = /[+\-\/x=]/;
+            let lastEntry: string = returnLastEntry();
             //limits operators from printing if there is a pre-existing operator as last user input
             currentArea.textContent = regexOperands.test(lastEntry)
               ? currentArea.textContent
