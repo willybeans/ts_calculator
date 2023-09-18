@@ -1,6 +1,6 @@
-type OperatingArray = Array<string | number>;
+export type OperatingArray = Array<string | number>;
 
-type Operations = "x" | "/" | "-" | "+";
+export type Operations = "x" | "/" | "-" | "+";
 
 type Calculate = {
   [key in Operations]: (arg1: number, arg2: number) => number;
@@ -20,7 +20,7 @@ type CalculatorOperationHelpers = {
   ) => OperatingArray;
 };
 
-const calculate: Calculate = {
+export const calculate: Calculate = {
   // prettier-ignore
   "x": (arg1, arg2) => arg1 * arg2,
   "/": (arg1, arg2) => arg1 / arg2,
@@ -28,7 +28,7 @@ const calculate: Calculate = {
   "-": (arg1, arg2) => arg1 - arg2,
 };
 
-const calculatorOperationHelpers: CalculatorOperationHelpers = {
+export const calculatorOperationHelpers: CalculatorOperationHelpers = {
   // this is passed the operator, which then returns the numbers surrounding it
   returnIndexOfEntry: (index, userEntry) => [
     Number(userEntry[index - 1]),
@@ -56,16 +56,25 @@ const calculatorOperationHelpers: CalculatorOperationHelpers = {
 
 export function operateOnEntry(userEntry: OperatingArray) {
   //this is where the calculations occur when hitting =
-  const operationsMD = ["x", "/"] as Operations[];
+  const operationsMD = ["/", "x"] as Operations[];
 
   while (userEntry.includes("x") || userEntry.includes("/")) {
-    if (!userEntry.includes("x") && operationsMD.includes("x")) {
-      operationsMD.shift();
+    const arg1 = userEntry.indexOf(operationsMD[0]);
+    const arg2 = userEntry.indexOf(operationsMD[1]);
+    let operation: Operations = "x";
+    let indexOfOperation: number = 1;
+
+    if (arg2 === -1 || (arg1 > -1 && arg2 > -1 && arg1 < arg2)) {
+      operation = operationsMD[0];
+      indexOfOperation = arg1;
+    } else if (arg1 === -1 || (arg2 > -1 && arg1 > -1 && arg2 < arg1)) {
+      operation = operationsMD[1];
+      indexOfOperation = arg2;
     }
 
     userEntry = calculatorOperationHelpers.calculationSequence(
-      operationsMD[0] as Operations,
-      userEntry.indexOf(operationsMD[0]),
+      operation,
+      indexOfOperation,
       userEntry
     );
   }
