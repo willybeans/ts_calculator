@@ -1,4 +1,4 @@
-import { makeButtons } from "./makeButtons";
+import { makeButtons } from "./tsModules/makeButtons";
 
 window.onload = () => {
   makeButtons();
