@@ -5,5 +5,7 @@ A calculator built with TypeScript, HTML, CSS, as well as unit tests written in 
 
 This project was originally written in vanilla JS, but was recently refactored into TS. That old js file has been kept in the file directory for reference.
 
-
-
+#### to run
+ - npm i
+ - npm run serve
+ - navigate to webpacks provided localhost url
