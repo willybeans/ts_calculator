@@ -43,48 +43,47 @@ export const applyClick = (userInput: string, btn: HTMLElement): void => {
           : currentArea.textContent + userInput;
     } else if (isNaN(Number(userInput))) {
       //**for all non numerics**\\
-      if (equals) {
-        //restricts equals from being pressed twice
-        return;
-      } else {
-        const regexOperands = /[+\-\/x=]/;
-        const currentUserInputArea = getText("currentArea");
+      const regexOperands = /[+\-\/x=]/;
+      const currentUserInputArea = getText("currentArea");
 
-        switch (userInput) {
-          case ".":
-            let previousEntry = currentUserInputArea.split(regexOperands);
-            if (!previousEntry[previousEntry.length - 1].includes(".")) {
-              //test for pre-existing period
-              currentArea.textContent = currentArea.textContent + userInput;
-            }
-            break;
-          case "=":
-            let currentEntry: string[] =
-              currentUserInputArea.split(/([+\-\/x=])/g);
-            let saveUserInput = currentArea.textContent;
-            const entryTotal = operateOnEntry(currentEntry);
-            equals = true;
-            totalEntry = [entryTotal[0]]; //will save answer for next calculation
-            currentArea.textContent = saveUserInput; //will display equation
-            totalArea.textContent = entryTotal[0].toString(); //will display answer
-            break;
-          case "AC":
-            changeDisplay(userInput);
-            currentArea.textContent = "";
-            totalArea.textContent = "";
-            break;
-          case "CE":
-            let clearedLastEntry = currentUserInputArea.split("");
-            clearedLastEntry.pop();
-            currentArea.textContent = clearedLastEntry.join("");
-            break;
-          default:
-            let lastEntry: string = returnLastEntry();
-            //limits operators from printing if there is a pre-existing operator as last user input
-            currentArea.textContent = regexOperands.test(lastEntry)
-              ? currentArea.textContent
-              : currentArea.textContent + userInput;
-        }
+      switch (userInput) {
+        case ".":
+          let previousEntry = currentUserInputArea.split(regexOperands);
+          if (!previousEntry[previousEntry.length - 1].includes(".")) {
+            //test for pre-existing period
+            currentArea.textContent = currentArea.textContent + userInput;
+          }
+          break;
+        case "=":
+          //restricts equals from being pressed twice
+          if (equals) {
+            return;
+          }
+          let currentEntry: string[] =
+            currentUserInputArea.split(/([+\-\/x=])/g);
+          let saveUserInput = currentArea.textContent;
+          const entryTotal = operateOnEntry(currentEntry);
+          equals = true;
+          totalEntry = [entryTotal[0]]; //will save answer for next calculation
+          currentArea.textContent = saveUserInput; //will display equation
+          totalArea.textContent = entryTotal[0].toString(); //will display answer
+          break;
+        case "AC":
+          changeDisplay(userInput);
+          currentArea.textContent = "";
+          totalArea.textContent = "";
+          break;
+        case "CE":
+          let clearedLastEntry = currentUserInputArea.split("");
+          clearedLastEntry.pop();
+          currentArea.textContent = clearedLastEntry.join("");
+          break;
+        default:
+          let lastEntry: string = returnLastEntry();
+          //limits operators from printing if there is a pre-existing operator as last user input
+          currentArea.textContent = regexOperands.test(lastEntry)
+            ? currentArea.textContent
+            : currentArea.textContent + userInput;
       }
     }
   };

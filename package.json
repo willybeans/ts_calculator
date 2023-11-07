@@ -11,7 +11,7 @@
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
     "bundle": "webpack",
     "dev": "webpack --mode development",
-    "serve": "webpack serve",
+    "serve": "webpack serve --mode development",
     "test": "jest"
   },
   "repository": {
